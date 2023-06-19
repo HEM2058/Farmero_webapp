@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sign Up</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body {
+			background-color: #f5f5f5;
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+		
+		.signup-box {
+			background-color: #ffffff;
+			border-radius: 5px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+			margin: 50px auto;
+			padding: 20px;
+			max-width: 400px;
+		}
+		
+		.signup-box h2 {
+			margin: 0 0 20px;
+			text-align: center;
+		}
+		
+		.signup-box input[type="text"],
+		.signup-box input[type="email"],
+		.signup-box input[type="password"] {
+			border-radius: 3px;
+			border: 1px solid #cccccc;
+			box-sizing: border-box;
+			display: block;
+			font-size: 16px;
+			margin-bottom: 10px;
+			padding: 10px;
+			width: 100%;
+		}
+		
+		.signup-box input[type="checkbox"] {
+			margin-right: 5px;
+		}
+		
+		.signup-box input[type="submit"] {
+			background-color: #4CAF50;
+			border: none;
+			border-radius: 3px;
+			box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+			color: #ffffff;
+			cursor: pointer;
+			display: block;
+			font-size: 16px;
+			margin: 20px auto 0;
+			padding: 10px;
+			width: 100px;
+		}
+		
+		.signup-box input[type="submit"]:hover {
+			background-color: #3e8e41;
+		}
+		
+		.signup-box p {
+			margin: 0;
+			text-align: center;
+		}
+		
+		.signup-box a {
+			color: #4CAF50;
+			text-decoration: none;
+		}
+		
+		.signup-box a:hover {
+			text-decoration: underline;
+		}
+		
+		@media only screen and (max-width: 600px) {
+			.signup-box {
+				margin: 20px;
+				padding: 10px;
+				max-width: none;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="signup-box">
+		<h2>Sign Up as FarmMart </h2>
+		<form action={% url 'tregistration' %} method="post">
+			{% csrf_token %}
+			<input type="text" name="uname" placeholder="Username" required>
+			<input type="email" name="email" placeholder="Email" required>
+			<input type="text" name="country" placeholder="Country">
+			<input type="text" name="sex" placeholder="Sex">
+			<input type="text" name="contact" placeholder="Phone Number">
+			<input type="password" name="password" placeholder="Password" required>
+			<input type="password" name="cpassword" placeholder="Confirm Password" required>
+			<label><input type="checkbox" name="agree" required> I agree to the terms and conditions</label>
+			<input type="submit" value="Sign Up">
+		</form>
+		<p>Already have an account? <a href="{% url 'tsignin' %}">Log in</</p>
+	</div>
+</body>
+</html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+
+
+
+{% if msg %}
+	swal({
+		icon: 'error',
+		title: 'Oops...',
+		text: '{{ msg }}',
+	});
+   {% endif %}
+</script>

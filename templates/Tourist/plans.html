@@ -1,0 +1,336 @@
+{% load filters%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Your Plan</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			background-color: white;
+			font-family: 'Muli', sans-serif;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			margin: 0;
+			overflow-x: hidden;
+		}
+
+		.courses-container {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			margin: 0 auto;
+			max-width: 1200px;
+			padding: 20px;
+			width: 100%;
+		}
+
+		.course {
+			background-color: #fff;
+			border-radius: 10px;
+			box-shadow: 0 10px 10px rgba(0, 0, 0, 1.2);
+			margin: 20px;
+			width: 80%;
+		}
+
+		.course-preview {
+			background-color: #2A265F;
+			color: #fff;
+			padding: 30px;
+			text-align: center;
+		}
+
+		.course-preview h6, .course-preview h3 {
+			margin: 0;
+			letter-spacing: 1px;
+			text-transform: uppercase;
+			
+		}
+
+		.course-preview a {
+			color: #fff;
+			display: inline-block;
+			font-size: 12px;
+			opacity: 0.6;
+			margin-top: 30px;
+			text-decoration: none;
+		}
+
+		.course-info-container {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			padding: 4px;
+			width: auto;
+			overflow-y: scroll;
+			height: auto;
+		}
+
+		.course-info {
+			border: 5px solid rgb(10, 10, 71);
+			border-radius: 10px;
+			margin: 20px;
+			padding: 30px;
+			width: 260px;
+			height: auto;
+		}
+
+		.course-info h6, .course-info h3 {
+			margin: 0;
+		}
+
+		.btn {
+			background-color: #2A265F;
+			border: 0;
+			border-radius: 50px;
+			box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+			color: #fff;
+			font-size: 16px;
+			padding: 12px 25px;
+			letter-spacing: 1px;
+			margin-top: 20px;
+			cursor: pointer;
+		}
+		.btn:hover {
+			background-color: #2A265F;
+			background-color: gold;
+		}
+
+		@media screen and (max-width: 767px) {
+			.course {
+				flex-direction: column;
+			}
+
+			.course-preview {
+				padding: 20px;
+			}
+
+			.course-info {
+				margin: 10px;
+				
+				
+			}
+		}
+
+		@media screen and (min-width: 768px) and (max-width: 1199px) {
+			.courses-container {
+				padding: 10px;
+			}
+
+			.course-info {
+				margin:0 ;
+}
+}
+@media screen and (min-width: 1200px) {
+		.courses-container {
+			display: flex;
+			justify-content: space-between;
+		}
+
+		.course-info {
+			margin: 10px;
+		}
+	}
+
+
+/* Style for the fixed header */
+header {
+	  background-color: #fff;
+	  margin: 0 auto;
+	  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+	  position: fixed;
+	  top: 0;
+	  left: 2px;
+	  z-index: 999;
+	  width: 100vw;
+	  padding: 4px;
+	
+	}
+	
+	header button {
+	  width: 100px;
+	  height: 40px;
+	  border: 1px solid black;
+	  border-radius: 10px;
+	  color: blue;
+	  
+	}
+	header button:hover{
+	  
+	  border: 1px solid black;
+	  border-radius: 10px;
+	  background-color: aqua;
+	  
+	  
+	}
+	
+	.course {
+	  margin-top: 50px;
+	  border: 1px solid #ccc;
+	  padding: 25px;
+	}
+
+	
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+	<header>
+		<center>
+			<form action="{% url 'index2' %}" method="get">
+				<button style="width: 100px; height: 40px; border: 1px solid black;">
+					<i class="fas fa-map-marker-alt"></i> Farmero
+				  </button>
+
+			</form>
+		</center>
+	  </header>
+ 
+    {% if plan %}
+   
+    {% for p in plan %}
+			<div class="course">
+				<div class="course-preview">
+					<h6>Product Location </h6>
+					<h3>{{p.pcoordinate}}</h3>
+					<div id="map"></div>
+					<h6>Product</h6>
+					<h3>{{p.product}}</h3>
+					<h6>Total Quantity</h6>
+					<h3>{{p.quantity}}</h3>
+					<h6>Remaining Quantity</h6>
+					<h3>{{p.remaining_quantity}}</h3>
+					<h6>Price per kg(in NRP)</h6>
+					<h3>{{p.budget}}</h3>
+				
+				</div>
+				<center>
+					<h2 style=" width: 100%; background-color: gold;">AgroBuyer' buy request</h2>
+				</center>
+<!-- 
+                Application from guides -->
+				<div class="course-info-container">
+                    {% if p.guide_requests.all %}
+                    {% for guide in p.guide_requests.all %}
+					<div class="course-info">
+					
+						
+						<h5>Name: {{guide.uname}}</h5>
+						<h5>Contact: {{guide.contact}}</h5>
+						<h5>Sex: {{guide.sex}}</h5>
+						<h5>Ordered quantity: {{ p|get_guide_request_quantity:guide }}kg</h5>
+						{% comment %} price={{p.budget}}
+						quantity={{ p|get_guide_request_quantity:guide }}
+						<h5 id="total-price">Total price:</h5> {% endcomment %}
+                   
+                
+ {% if p|has_guide_request:guide %}
+ <button style="background-color: gold;" type="submit" class="btn">Paid</button>
+{% else %}
+    <form action="{% url 'accept_guide_request' guide_id=guide.id plan_id=p.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn">Not paid</button>
+    </form>
+{% endif %} 
+
+
+
+
+<!--                          
+                            <form action="{% url 'accept_guide_request' guide_id=guide.id plan_id=p.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn">Accept</button>
+                            </form>
+                    -->
+						
+					</div>
+                    {% endfor %}
+                    {% else %}
+                 
+                        <center>
+                            <h3 >No Product request till Now!</h3>
+                            <h4>Please Wait....</h4>
+                        </center>
+                   
+                   
+                    {%endif%}
+			</div>
+			
+		
+			
+			
+				
+		
+		
+		</div>
+        {% endfor %}
+	
+    {% else %}
+	
+	<center>
+		<h1 style="margin: 100px;">You have not applied any plan application till Now !</h1>
+	</center>
+	 {% endif %}
+
+</body>
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+// $('.btn').click(function() {
+//   $('.course-info').not($(this).parent()).css('opacity', '0.5');
+// });
+
+// Get all the buttons
+const buttons = document.querySelectorAll('.btn');
+const courseInfos = document.querySelectorAll('.course-info');
+
+
+buttons.forEach((button) => {
+  button.addEventListener('click', (event) => {
+    event.target.style.backgroundColor = 'gold';
+    buttons.forEach((otherButton) => {
+      if (otherButton !== button) {
+        otherButton.style.opacity = 0.3;
+        otherButton.disabled = true;
+        otherButton.style.pointerEvents = 'none'; // Disable hover effect
+      }
+    });
+    courseInfos.forEach((courseInfo, courseIndex) => {
+      if (index !== courseIndex) {
+        courseInfo.style.opacity = 0.2;
+      }
+    });
+  });
+});
+
+
+
+// calculating total price
+
+            {% comment %} var budget = parseFloat("budget");
+            console.log(budget)
+            var quantity = parseFloat("quantity");
+            var totalPrice = budget * quantity;
+			
+            document.getElementById('total-price').innerHTML = "Total Price: " + totalPrice; {% endcomment %}
+    
+
+</script>

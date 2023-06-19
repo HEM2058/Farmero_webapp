@@ -1,0 +1,1886 @@
+{% load static%}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Dashboard</title>
+  
+   
+    
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.awesome-markers/2.1.0/leaflet.awesome-markers.css" integrity="sha512-B/W/a6qfU6dAgw7VvUoLZkn7V+tR6cBv9PktW8GivfRd94kwxdTD5RRHua5lu5l29l5e3qkZvBR9XKo8ScttEw==" crossorigin="anonymous" />
+ 
+
+
+    <link rel="stylesheet" href="{% static '/css/L.Control.Basemaps.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+  <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
+ 
+     <link rel="stylesheet" href="{% static '/leaflet-custom marker/leaflet.awesome-markers.css' %}">
+      
+    <!-- Custom CSS -->
+    <style>
+
+        
+        /* Set full height */
+        html, body  {
+            height: 100%;
+           
+        }
+
+
+       
+        
+        #map{
+            width: 100%;
+            height: 100vh;
+
+
+        }
+        /* Set padding for map container */
+        #map-container {
+            padding: 0;
+        }
+
+        /* Default styles for the Leaflet pop up */
+        .leaflet-popup-content {
+            max-width: 300px;
+        }
+        
+        .leaflet-popup-content strong {
+            font-size: 24px;
+            margin-top: 0;
+        }
+        
+        .leaflet-popup-content span {
+            font-size: 16px;
+            margin-bottom: 0;
+        }
+        
+        .leaflet-popup-content a.see-more {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        
+        /* Media queries for different screen sizes */
+        @media (max-width: 768px) {
+            .leaflet-popup-content {
+                max-width: 200px;
+            }
+            
+            .leaflet-popup-content strong {
+                font-size: 20px;
+            }
+            
+            .leaflet-popup-content span {
+                font-size: 14px;
+            }
+            
+            .leaflet-popup-content a.see-more {
+                font-size: 14px;
+                padding: 5px 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .leaflet-popup-content {
+                max-width: 150px;
+            }
+            
+            .leaflet-popup-content strong {
+                font-size: 18px;
+            }
+            
+            .leaflet-popup-content span {
+                font-size: 12px;
+            }
+            
+            .leaflet-popup-content a.see-more {
+                font-size: 12px;
+                padding: 4px 8px;
+            }
+        }
+        /* Style for menu button */
+        .menu-btn {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: none;
+            outline: none;
+        }
+        /* Style for menu bar */
+        .menu-bar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    z-index: 998;
+    width: 200px;
+    height: 610px; /* Increased height to fit User Mode buttons */
+    border-radius:  2px 30px 4px 20px;
+    background-color: #f8f8f8;
+    transition: all 0.3s ease;
+}
+/* Style for menu bar - show */
+.menu-bar.show {
+    left: 0;
+    top:70px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+
+}
+/* Style for menu items */
+.menu-item {
+    padding: 10px 20px;
+    font-size: 18px;
+    color: #343a40;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s ease;
+}
+/* Style for menu items - hover */
+.menu-item:hover {
+    background-color: #e9ecef;
+}
+/* Style for active menu item */
+.menu-item.active {
+    background-color:transparent;
+    color: #4016d7;
+}
+
+/* Style for User Mode buttons */
+.user-mode {
+    margin-top: 20px;
+    text-align: center;
+}
+.user-mode p {
+    font-size: 16px;
+    font-weight: bold;
+}
+.user-mode button {
+    margin: 10px;
+    padding: 8px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 20px;
+    background-color: #4016d7;
+    color: #fff;
+    cursor: pointer;
+}
+.user-mode button:hover {
+    background-color: #1a0c51;
+}
+.user-mode button:focus {
+    outline: none;
+}
+
+        /* Style for filter button */
+        .filter-btn {
+            background-color: black;
+            border: none;
+            outline: none;
+        }
+        /* Style for post plan button */
+        .post-plan-btn {
+            background-color:transparent;
+            border: none;
+            outline: none;
+        }
+        /* Style for history button */
+        .history-btn {
+            background-color: transparent;
+            border: none;
+            outline: none;
+        }
+        /* Style for payment button */
+      
+        /* Style for setting button */
+        .setting-btn {
+            background-color: transparent;
+            border: none;
+            outline: none;
+        }
+        /* Style for menu button icon */
+        .menu-btn i {
+            font-size: 24px;
+            color: #343a40;
+        }
+
+      .menu-bar a{
+        text-decoration: none;
+     }
+     #search-bar {
+  position: absolute;
+  top: 15px;
+  right: 45px;
+  z-index: 999;
+}
+
+/* Style for search bar input */
+#search-input {
+  width: 250px;
+  height: 50px;
+  padding: 10px 10px 10px 50px;
+  font-size: 16px;
+  border-radius: 25px;
+  border: none;
+  background-color: #f8f9fa;
+  /* background-image: url('https://cdn-icons-png.flaticon.com/512/709/709690.png'); */
+  background-size: 20px;
+  background-repeat: no-repeat;
+  background-position: 15px center;
+}
+
+/* Style for direction icon */
+#direction-icon {
+  position: absolute;
+  top: 12px;
+  left: 11px;
+  font-size: 30px;
+  color: #343a40;
+  cursor: pointer;
+  z-index: 1000;
+  
+}
+
+
+
+/* Style for search icon */
+#search-icon {
+  position: absolute;
+  top: 18px;
+  left: 210px;
+  font-size: 20px;
+  color: #343a40;
+  cursor: pointer;
+  z-index: 1000;
+}
+#direction-popup {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  width: 360px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  padding: 20px;
+  z-index: 1000;
+  display: none;
+}
+
+@media only screen and (max-width: 768px) {
+  #direction-popup {
+    width: 90%;
+    max-width: 500px;
+    right: 5%;
+    left: 5%;
+    top: 12%;
+  }
+}
+
+#direction-popup.show {
+  display: block;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.popup-header i {
+  font-size: 400px;
+  cursor: pointer;
+  color: #343a40;
+ 
+}
+.popup-header  .fa-car{
+ 
+  font-size:25px;
+box-shadow: #4016d7;
+
+}
+
+.popup-header  .fa-bicycle{
+
+  font-size:25px;
+
+}
+
+.popup-header  .fa-walking{
+
+
+  font-size:25px;;
+}
+
+
+.popup-header i.fa-times {
+  font-size: 18px;
+}
+
+.popup-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.from-to-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.from-to-row i {
+  font-size: 24px;
+  color: #343a40;
+  margin-right: 10px;
+}
+
+.from-to-row input[type="text"] {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  padding: 10px;
+  font-size: 15px;
+  outline: none;
+}
+
+.popup-body button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 55px;
+  padding: 15px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+
+/* search result popup */
+#search-popup {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  width: 320px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  z-index: 1000;
+  display: none;
+ 
+}
+
+#search-popup.show {
+  display: block;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.popup-header i {
+  font-size: 18px;
+  cursor: pointer;
+  color: #343a40;
+}
+
+.popup-header i.fa-times {
+  font-size: 18px;
+}
+
+.popup-body {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 400px;
+}
+.result-item {
+
+font-family: Arial, sans-serif;
+position: relative;
+padding-top: 6px;
+padding-left: 30px;
+}
+
+.result-item::before {
+content: "\f3c5";
+position: absolute;
+left: 5px;
+top: 50%;
+transform: translateY(-50%);
+font-family: "Font Awesome 5 Free";
+font-weight: 900;
+font-size: 1.2em;
+color: black;
+}
+
+.popup-body .search-result {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.popup-body .search-result:hover {
+  background-color: #f5f5f5;
+}
+
+.popup-body .search-result i {
+  font-size: 16px;
+  color: #343a40;
+  margin-right: 10px;
+
+}
+
+.popup-body .search-result .search-result-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.popup-body .search-result .search-result-address {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 5px;
+}
+#search-results .result-item {
+  cursor: pointer;
+  
+}
+
+#search-results .result-item:hover {
+  background-color: #eee;
+}
+
+#search-results .result-item.selected {
+  border: 2px solid #0077ff;
+}
+
+#search-results .result-item.selected:hover {
+  background-color: #fff;
+}
+
+.preloader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.location-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  margin-top: -25px;
+  margin-left: -25px;
+  background-image: url('https://cdn4.iconfinder.com/data/icons/small-n-flat/24/map-marker-512.png');
+  background-size: 100% 100%;
+  z-index: 1;
+}
+
+.preloader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  margin-top: -30px;
+  margin-left: -30px;
+  border-radius: 50%;
+  border-top: 5px solid #3498db;
+  border-right: 5px solid transparent;
+  animation: spin 1s linear infinite;
+  z-index: 0;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/* Style for active user mode item */
+.user-mode-btn.active::before {
+  content: "\2713";
+  color: #2196F3;
+  font-size: 30px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+/* location cross hair icon */
+.crosshair-icon {
+    position: absolute;
+    bottom: 20%;
+    right: 0;
+    transform: translateX(-50%);
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 30%;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.crosshair-icon .fa-crosshairs {
+    color: #3366ff;
+    font-size: 30px;
+    
+}
+
+.crosshair-icon:hover {
+    background-color: #ecf3f8;
+    cursor: pointer;
+}
+
+.crosshair-icon:hover .fa-crosshairs {
+    color: #29cb08;
+}
+
+/* publish plan button */
+
+/* Style for the popup form */
+/* Style for the pop-up form */
+#publish-plan-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+
+#publish-plan-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+#publish-plan-form input[type="text"],
+#publish-plan-form input[type="datetime-local"],
+#publish-plan-form input[type="number"],
+#publish-plan-form select {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+#publish-plan-form button[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#publish-plan-form button.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #555;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+#publish-plan-form button.close:hover {
+  color: #007bff;
+}
+
+/* Style for the overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  display: none;
+}
+
+/* Style for the background elements */
+body {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Media query for small screens */
+@media only screen and (max-width: 767px) {
+  #publish-plan-form {
+    max-width: 90%;
+  }
+}
+
+/* Style to make the pop-up float over the background elements */
+body.modal-open {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+body.modal-open #publish-plan-form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+/* 
+Notification popup */
+#notification-popup {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  display: none;
+}
+
+#notification-popup p {
+  font-size: 16px;
+  margin: 0 0 10px;
+}
+
+#close-popup {
+  background-color: #eee;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  float: right;
+}
+
+/* popup for request guide */
+
+/* design for plan popup */
+.popup-content {
+    max-width: 400px;
+}
+
+.popup-info {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.popup-label {
+    width: 100px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.popup-value {
+    flex: 1;
+    word-break: break-all;
+}
+
+.apply-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #008CBA;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.apply-button:hover {
+    background-color: #0077B5;
+}
+
+
+@media only screen and (max-width: 600px) {
+    .popup-content {
+        max-width: 100%;
+    }
+
+    .popup-label {
+        width: 50%;
+    }
+}
+
+/* Notification bar */
+.popup-menu {
+  position: absolute;
+  top: 80px; /* adjust as needed */
+  left: 120px;
+  z-index: 1; /* make sure popup is on top of other elements */
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 10px;
+  display: none;
+  width: 200px;
+  height: 400px;
+  overflow-y: scroll; /* add scroll bar if content is larger than the height */
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-content h5 {
+  margin: 0 0 5px;
+}
+
+.notification-time {
+  margin: 0;
+  font-size: 12px;
+  color: #999;
+}
+
+
+.popup-menu.show {
+  display: block;
+  transform: translateX(10px);
+}
+
+
+@media only screen and (max-width: 500px) {
+    .popup-menu {
+        max-height: 300px;
+    }
+
+   
+}
+@media only screen and (max-width: 640px){
+.leaflet-routing-container {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 80%;
+    height: 60%;
+}
+}
+.leaflet-routing-container{
+  background-color: rgb(237, 250, 250);
+  border: 3px solid black;
+  top: 140px;
+
+  border-radius: 5px;
+}
+/* 
+Filter search */
+#list-items {
+  position: absolute;
+  top: 10px; /* Adjust the top position as needed */
+  left: 100px; /* Adjust the left position as needed */
+  z-index: 1000; /* Ensure the list appears above the map */
+  align-items: center; /* Center items vertically */
+  border-radius: 4px;
+  padding: 10px;
+}
+
+#list-items ul {
+  display: flex; /* Add flex display */
+  flex-direction: row; /* Align items in a row */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#list-items li {
+  display: flex; /* Add flex display */
+  align-items: center; /* Center content vertically */
+  background-color: white;
+  border: 2px solid whitesmoke;
+  border-radius: 8px;
+  padding: 5px;
+  margin-right: 10px; /* Add space between list items */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add box shadow effect */
+}
+
+#list-items li:last-child {
+  margin-right: 0; /* Remove margin from the last item */
+}
+
+#list-items li i {
+  margin-right: 8px; /* Add spacing between the icon and text */
+}
+
+
+/* Media query for small devices */
+@media screen and (max-width: 900px) {
+  #list-items {
+    position: fixed;
+    top: 80px;
+    left: 200px;
+    right: 0px;
+    display: flex;
+    align-items: flex-start;
+    z-index: 1000;
+    border-radius: 4px;
+    padding: 10px;
+  }
+
+  #list-items ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* Add flex display */
+    flex-direction: row; /* Align items in a row */
+    overflow-x: scroll; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent line breaks */
+  }
+
+  #list-items li {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 2px solid whitesmoke;
+    border-radius: 8px;
+    padding: 5px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+   
+  }
+}
+
+
+    </style>
+</head>
+<body id="body">
+  
+<div id="DisplayControl">
+ <!-- Menu button -->
+ <button class="menu-btn" id="menu-btn"><i class="fas fa-bars"></i></button>
+ <!-- Map container -->
+ <!-- Preloader -->
+ <!-- HTML code -->
+ <div class="preloader-container">
+<div class="location-icon"></div>
+<div class="preloader"></div>
+</div>
+
+ <div id="map-container">
+     <div id="map"></div>
+     <div class="crosshair-icon">
+       <i class="fas fa-crosshairs"></i>
+   </div>
+ </div>
+<!-- Location crosshair icon -->
+
+
+ <!-- Menu bar -->
+ <div class="menu-bar" id="menu-bar">
+   <!-- Menu items -->
+   <a href="#" class="menu-item active"><i class="fas fa-map-marker-alt"></i> Farmero</a>
+
+   <!-- <a href="#" id="Notification-btn" class="menu-item Notification-btn"><i class="fas fa-bell notification"></i> Notification</a> -->
+   <a href="#" id="Notification-btn" class="menu-item Notification-btn">
+    <i class="fas fa-bell notification"></i> Notification
+    <span style="font-weight: bold; font-size: 1.2em; color:white ; margin-bottom: 2px; background-color:#7a59f4 ; border-radius: 4px;" class="notification-count"></span>
+  </a>
+   
+   <a href="#" class="menu-item post-plan-btn"><i class="fas fa-upload"></i> Post Product</a>
+  
+    <a href="{% url 'yourplans' pk=request.session.id %}" class="menu-item post-plan-btn"><i class="fas fa-calendar-alt"></i> Your Product</a>
+ 
+ 
+   <!-- <a href="#" class="menu-item history-btn"><i class="fas fa-history"></i> History</a> -->
+   <a href="#" class="menu-item setting-btn"><i class="fas fa-cog"></i> Settings</a>
+   <a href="{% url 'help' %}" class="menu-item Help-btn"><i class="fas fa-question-circle"></i> Help</a>
+   <!-- <a href="#" class="menu-item Feedback-btn"><i class="fas fa-comment-alt"></i> Feedback</a> -->
+
+   <!-- User Mode buttons -->
+   <div class="user-mode">
+       <p>User Mode:</p>
+       <a href="#" class="menu-item user-mode-btn tourist active">   <i class="fas fa-tractor"></i>  FarmMart</a>
+       <!-- <a href="{% url 'index1' %}" class="menu-item user-mode-btn normal " ><i class="fas fa-user"></i> Normal</a> -->
+       <a href="{% url 'gsignup' %}" class="menu-item user-mode-btn guider">   <i class="fas fa-shopping-basket"></i> AgroBuyer</a>
+   </div>
+
+  <!-- Notification popup -->
+
+  <div class="popup-menu leaflet-control" id="notification-menu">
+  
+
+        <div class="notification-item">
+          <div class="notification-content">
+            <h5>Notifications</h5>
+            <p class="message"></p>
+            <p class="notification-time"></p>
+          </div>
+        </div>
+     
+
+        <p class="emptynotification">No notifications found.</p>
+ 
+  </div>
+  
+   </div>
+      <!-- List items -->
+      <div id="list-items">
+        <ul>
+          <li><i class="fas fa-medkit"></i>Agrovet</li>
+          <li><i class="fas fa-users"></i>Cooperative office </li>
+          <li><i class="fas fa-mountain"></i>Farmyard</li>
+          <!-- <li><i class="fas fa-hotel"></i>Hotel</li> -->
+          <li><i class="fas fa-money-bill"></i>ATM</li>
+          <!-- <li><i class="fas fa-utensils"></i>Restaurants</li> -->
+          <li><i class="fas fa-university"></i>Bank</li>
+          <li><i class="fas fa-hospital"></i>Hospital</li>
+          
+          <!-- Add more list items here -->
+        </ul>
+      </div>
+   <!-- Search bar -->
+<div id="search-bar">
+  <i id="direction-icon" class="fas fa-directions"></i>
+  <input type="text" id="search-input" class="query-input" placeholder="Search place">
+  <i id="search-icon" class="fas fa-search"></i>
+  <div id="line-separator"></div>
+ </div>
+ <!-- Direction popup -->
+ <div id="direction-popup">
+  <div class="popup-header">
+    <i class="fas fa-car"></i>
+    <i class="fas fa-bicycle"></i>
+    <i class="fas fa-walking"></i>
+    <i class="fas fa-times"></i>
+  </div>
+  <div class="popup-body">
+    <div class="from-to-row">
+     
+      <input type="text" id="yourlocation" class="query-input1" placeholder="Your location">
+      <i id="yourlocation-icon" class="fas fa-search"></i>
+    </div>
+    <div class="from-to-row">
+     
+      <input id="yourdestination" class="query-input2" type="text" placeholder="Choose destination">
+      <i id="yourdestination-icon" class="fas fa-search"></i>
+    </div>
+    <button id="get-directions-btn">Get Directions</button>
+  </div>
+ </div>
+ 
+ 
+
+ 
+ <!-- publish plan popup -->
+ </div>
+</div>
+
+ 
+ <!-- Search result popup -->
+ <!-- Search popup -->
+ <div id="search-popup">
+  <div class="popup-header">
+   <h3>Search Results</h3>
+   <i class="fas fa-times"></i>
+  </div>
+  <div class="popup-body">
+   <div id="search-results" class="search-results-container"></div>
+  </div>
+  <div class="popup-footer">
+   <div class="search-results-footer">
+     <span id="search-results-count"></span>
+     <div class="search-results-slider">
+       <div class="slider-track">
+         <div class="slider-thumb"></div>
+       </div>
+     </div>
+   </div>
+  </div>
+  </div>
+   
+
+
+  <div id="popup-overlay">
+    <div style="display: none;" id="publish-plan-form">
+      <button class="close">&times;</button>
+      <h2>Publish Product</h2>
+      <form action="{% url 'create_plan' pk=request.session.id %}" id="myForm" method="post">
+        {% csrf_token %}
+        <label for="location">
+          <i class="fas fa-map-marker-alt"></i> Location of the Product: <a href=""></a> <button class="c_location">Current location</button>
+        </label>
+        <input type="text" id="location" class="query-input4" name="pcoordinate" placeholder="Enter location">
+        
+        <label for="product"><i class="fas fa-shopping-basket"></i> Product:</label>
+        <input type="text" id="product" name="product" placeholder="Enter product name">
+        
+        <label for="quantity"><i class="fas fa-balance-scale"></i> Total Quantity (in kg):</label>
+        <input type="number" id="quantity" name="quantity" min="0" step="1">
+  
+        <label for="budget"><i class="fas fa-dollar-sign"></i> Price per kg (NPR):</label>
+        <input type="number" id="budget" name="budget" min="0" step="10">
+  
+        <button type="submit" id="post-plan-btn" class="post">Post Product</button>
+      </form>
+      <p style="font-size: 12px; font-style: italic; margin-top: 10px;">Upon submitting your product, it will become visible to potential buyers who can contact you for purchase.</p>
+    </div>
+  </div>
+
+  
+
+
+
+
+
+  
+</div>
+
+
+
+    <!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+<!-- Font Awesome -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
+<!-- Leaflet JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+<script src="{% static '/js/L.Control.Basemaps.js' %}"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="{% static 'leaflet-custom marker/leaflet.awesome-markers.min.js' %}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+ <!-- Leaflet.locatecontrol JavaScript -->
+ <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.71.0/dist/L.Control.Locate.min.js"></script>
+<!-- Custom JS -->
+<script>
+// Function to handle the button click event
+// Function to handle the button click event
+function getCurrentLocation(event) {
+  // Prevent the default form submission behavior
+  event.preventDefault();
+
+  // Check if the Geolocation API is supported
+  if (navigator.geolocation) {
+    // Use the Geolocation API to get the current position
+    navigator.geolocation.getCurrentPosition(function(position) {
+      // Retrieve the latitude and longitude coordinates
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+      
+      // Create a string with the coordinates
+      var coordinates = latitude + ', ' + longitude;
+      
+      // Update the input field with the coordinates
+      document.getElementById('location').value = coordinates;
+    }, function(error) {
+      // Handle any errors that occur during geolocation retrieval
+      console.error('Error getting current location:', error);
+    });
+  } else {
+    console.error('Geolocation is not supported by this browser.');
+  }
+}
+
+// Attach a click event listener to the button using querySelector
+document.querySelector('.c_location').addEventListener('click', getCurrentLocation);
+
+
+  var scaleControl;
+  var zoomControl;
+  console.log({{message}})
+  const preloader = document.querySelector(".preloader-container");
+ 
+    $(document).ready(function() {
+
+
+
+
+        // Initialize map
+        
+       var map = L.map('map', {
+    // maxZoom: 20,
+    // minZoom: 6,
+    zoomControl: false
+});
+
+// map.setView([28.2096, 83.9856], 7);
+var defaultView = [20.5937, 78.9629]; 
+var lc = L.control.locate({
+  setView: 'untilPan',  // setView option set to 'once'
+  locateOptions: {
+    maximumAge: 10000,
+    timeout: 10000,
+    enableHighAccuracy: false
+  },
+  onLocationError: function(err) {
+    alert(err.message);
+    map.setView(defaultView, 4);
+  },
+  onLocationFound: function(e) {
+    // Use the user's location to set the center and zoom level of the map
+    map.setView(e.latlng,5);
+  }
+}).addTo(map);
+lc.getContainer().style.display = 'none';
+// Manually start the plugin to check for the user's location
+lc.start();
+
+var customZoomControl = L.control.zoom({
+  position: 'bottomleft',
+  zoomInText: '+', // Customize the zoom in text
+  zoomOutText: '-', // Customize the zoom out text
+  zoomInTitle: 'Zoom In', // Customize the zoom in tooltip
+  zoomOutTitle: 'Zoom Out' // Customize the zoom out tooltip
+}).addTo(map);
+zoomControl = customZoomControl
+// Adjust the size and position of the zoom control using CSS
+var zoomControlContainer = customZoomControl.getContainer();
+zoomControlContainer.style.width = '20px'; // Set the width of the container
+zoomControlContainer.style.height = '20px'; // Set the height of the container
+zoomControlContainer.style.marginBottom = '150px'; // Adjust the bottom margin as needed
+zoomControlContainer.style.marginLeft = '10px'; // Adjust the left margin as needed
+zoomControlContainer.style.borderRadius = '50%'; // Apply border radius to create a circular button
+ 
+      
+      
+      scaleControl = L.control.scale({metric: true}).addTo(map);     
+              // Add tile layer
+      
+        
+
+        var basemaps = [
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          subdomains: "abcd",
+                          maxZoom: 20,
+                          minZoom: 0,
+                          label: "OSM layer"
+                         
+      }),
+      googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+          maxZoom: 20,
+          subdomains:['mt0','mt1','mt2','mt3'],
+        
+                          maxZoom: 20,
+                          minZoom: 0,
+                          label: "Google satellite"
+      }),
+      googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+          maxZoom: 20,
+          subdomains:['mt0','mt1','mt2','mt3'],
+                          maxZoom: 20,
+                          minZoom: 0,
+                          label: "Google Hybrid"
+      }),
+      googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+          maxZoom: 20,
+          subdomains:['mt0','mt1','mt2','mt3'],
+          
+                          maxZoom: 20,
+                          minZoom: 0,
+                          label: "Google street"
+      }),
+     
+      osmcyclo =  L.tileLayer(
+        "https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png",
+        {
+          attribution: "CyclOSM | Map data: © OpenStreetMap contributors",
+          subdomains: "abcd",
+                          maxZoom: 20,
+                          minZoom: 0,
+                          label: "CyclOSM"
+        })   
+                  
+                
+                  ];
+      
+                  map.addControl(
+                      L.control.basemaps({
+                          basemaps: basemaps,
+                          tileX: 0,
+                          tileY: 0,
+                          tileZ: 1
+                      })
+                  );
+      
+        
+      
+
+
+  
+// receiving  the guide location
+// Set up a WebSocket connection
+// const socket = new WebSocket('wss://localhost:8000/wss/tourist/');
+const socket = new WebSocket('wss://' + window.location.host + '/wss/tourist/');
+// Create an object to keep track of the markers for each tourist
+const touristMarkers = {};
+
+socket.onopen = () => {
+  console.log('WebSocket connection established.');
+  const message = {
+    type: 'group.join', // The type of message being sent
+    group: 'tourists', // The name of the group to join
+  };
+  socket.send(JSON.stringify(message)); // Send the message to join the group
+};
+
+socket.onmessage = function(event) {
+  console.log("Receiving data.");
+  console.log("Received data from server:", event.data);
+  const data = JSON.parse(event.data);
+  // Extract the latitude and longitude values from the received data
+  const latitude = parseFloat(data.latitude);
+  const longitude = parseFloat(data.longitude);
+  const guide_id = parseInt(data.guide_id);
+  const guide_uname = String(data.guide_uname);
+
+  // Remove the previous marker for this tourist, if it exists
+  if (touristMarkers[guide_id]) {
+    map.removeLayer(touristMarkers[guide_id]);
+  }
+
+  // Create a new marker for this Guide at the current location
+  const icon = L.AwesomeMarkers.icon({
+    icon: 'fas fa-shopping-basket',
+    markerColor: 'red',
+    iconColour:'white',
+    prefix: 'fa'
+  });
+
+  const marker = L.marker([latitude, longitude], {
+    icon: icon
+  });
+
+  // Add the marker to the map and store it in the touristMarkers object
+  marker.addTo(map)
+  .on('click', function () {
+      $.ajax({
+          url: `/get_guide_info/${guide_id}/`,
+          type: 'GET',
+          success: function (data) {
+              const guideInfo = `
+              <div class="popup-content">
+            <h4>${data.uname}</h4>
+            <div class="popup-info">
+                <div class="popup-label">Email:</div>
+                <div class="popup-value">${data.email}</div>
+            </div>
+            <div class="popup-info">
+                <div class="popup-label">Contact:</div>
+                <div class="popup-value">${data.contact}</div>
+            </div>
+            <div class="popup-info">
+                <div class="popup-label">Sex:</div>
+                <div class="popup-value">${data.sex}</div>
+            </div>
+            <form action="" method="get">
+              
+       <button class="apply-button" id="guide-request-button">Request to sell product</button>
+       </form>
+        </div>`
+              
+              marker.bindPopup(guideInfo).openPopup();
+           // Add event listener to the "Request for a ride" button
+              const guideRequestButton = document.getElementById('guide-request-button');
+              guideRequestButton.addEventListener('click', function(event) {
+                  event.preventDefault(); // Prevent form submission
+                  const guideRequestId = guide_id;
+                  const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+                  const url = `/create_guide_request/${guide_id}/`; // Include guide ID in URL
+
+                  // Send AJAX request to create the guide request
+                  $.ajax({
+                      url: `/create_guide_request/${guide_id}/`,
+                      type: 'POST',
+                      headers: { 'X-CSRFToken': csrfToken },
+                      success: function(data) {
+                          // Show success message to the user
+                          // alert('Guide request created successfully!');
+                          swal({
+                               icon: 'success',
+                               title: 'Great!',
+                                text: 'You have requested ' + guide_uname + ' to sell the product.',
+                               });
+                      },
+                      error: function(xhr, status, error) {
+                          // Show error message to the user
+                          // console.log('Error:', xhr, status, error);
+                          // alert('Failed to create guide request.');
+                          swal({
+                           icon: 'error',
+                           title: 'Oops...',
+                           text: 'Failed to request the guide.Please report us the problem from help section',
+                        });
+                      }
+                  });
+              });
+
+              
+          }
+      });
+  });
+  touristMarkers[guide_id] = marker;
+};
+
+
+preloader.style.display = "none";
+
+// #Navigate to your location
+const location = document.querySelector('.crosshair-icon')
+location.addEventListener("click", function(){
+  preloader.style.display = "block";
+  navigator.geolocation.getCurrentPosition(function(position) {
+    L.circle([position.coords.latitude, position.coords.longitude], {
+
+}).addTo(map);
+
+var icon = L.AwesomeMarkers.icon({
+  icon: 'fas fa-tractor',
+  markerColor: 'red',
+  prefix: 'fa',
+  
+
+});
+
+L.marker([position.coords.latitude, position.coords.longitude], {
+  icon: icon
+}).addTo(map);
+   
+    map.flyTo([position.coords.latitude, position.coords.longitude], 15, {
+    duration: 2,  // duration of the animation in seconds
+    easeLinearity: 0.25  // easing factor for the animation
+
+    
+  });
+
+preloader.style.display = "none";
+     
+    });
+});
+ // get references to the input fields and button
+
+ const directionPopup1 = document.querySelector('#direction-popup');
+ const yourLocationInput1 = document.getElementById("yourlocation");
+  const yourDestinationInput1 = document.getElementById("yourdestination");
+  const getDirectionsButton = document.getElementById("get-directions-btn");
+  
+  // add event listener to button
+  getDirectionsButton.addEventListener("click", function() {
+    
+
+    const yourLocation = yourLocationInput1.value;
+    const yourDestination = yourDestinationInput1.value;
+      // Check if yourDestination is empty
+  if (!yourDestination) {
+    // alert("Please enter the destination");
+    // return;
+    swal({
+  title: "Please enter the destination",
+  icon: "warning",
+  confirmButtonColor: "#3085d6",
+  confirmButtonText: "OK",
+ });
+return;
+
+  }
+   // Show preloader
+   preloader.style.display = "block";
+     // Check if yourLocation is empty
+  if (!yourLocation) {
+    // If yourLocation is empty, get current location
+      navigator.geolocation.getCurrentPosition(function(position) {
+      // Call yourFunction with current location and destination
+      yourFunction(
+        position.coords.latitude + ',' + position.coords.longitude,
+        yourDestination
+      );
+      var icon = L.AwesomeMarkers.icon({
+  icon: 'fas fa-map-marked-alt',
+  markerColor: 'red',
+  iconColour:'white',
+  prefix: 'fa'
+  
+
+  
+
+});
+L.marker([position.coords.latitude, position.coords.longitude], {
+  icon: icon
+}).addTo(map);
+    });
+  } else {
+    // If yourLocation is not empty, call yourFunction with yourLocation and yourDestination
+    yourFunction(yourLocation, yourDestination);
+  }
+  });
+
+
+  function yourFunction(start, end) {
+    
+  var latitude = start.split(",")
+  var la1= parseFloat(latitude[0])
+  var la2= parseFloat(latitude[1])
+
+   var longitude = end.split(",")
+   var lo1 = parseFloat(longitude[0])
+   var lo2 = parseFloat(longitude[1])
+    console.log(la1,la2)
+    console.log(lo1,lo2)
+  L.Routing.control({
+    waypoints: [
+
+
+      L.latLng(la1,la2),
+      L.latLng(lo1,lo2)
+   
+    ]
+    
+
+    }).addTo(map);
+    map.flyTo([la1, la2], 8, {
+    duration: 2,  // duration of the animation in seconds
+    easeLinearity: 0.25  // easing factor for the animation
+
+    
+  });
+
+    directionPopup1.style.display = 'none';
+      // Hide preloader
+  preloader.style.display = "none";
+  }
+
+
+
+
+    // direction popup
+    const directionIcon = document.querySelector('#direction-icon');
+const directionPopup = document.querySelector('#direction-popup');
+const closeDirectionPopup = directionPopup.querySelector('.fa-times');
+
+directionIcon.addEventListener('click', () => {
+  directionPopup.style.display = 'block';
+});
+
+closeDirectionPopup.addEventListener('click', () => {
+  directionPopup.style.display = 'none';
+});
+
+// search result popup
+const searchPopup = document.querySelector('#search-popup');
+const searchInput = document.querySelector('#search-input');
+const searchIcon = document.querySelector('#search-icon');
+const yourLocationInput = document.querySelector('#yourlocation');
+const yourLocationIcon = document.querySelector('#yourlocation-icon');
+const yourDestinationInput = document.querySelector('#yourdestination');
+const yourDestinationIcon = document.querySelector('#yourdestination-icon');
+const searchResults = document.querySelector('#search-results');
+const Destination = document.querySelector('#destination');
+const queryInput = document.querySelector('.query-input');
+const queryInput1 = document.querySelector('.query-input1');
+const queryInput2 = document.querySelector('.query-input2');
+// const queryInput3 = document.querySelector('.query-input3');
+const queryInput4 = document.querySelector('.query-input4');
+
+// Destination.addEventListener('keyup', (event) => {
+//   if (event.key === 'Enter') {
+//     search(Destination.value);
+//   }
+// });
+// searchInput.addEventListener('keyup', (event) => {
+//   if (event.key === 'Enter') {
+//     search(searchInput.value);
+//   }
+// });
+
+// searchIcon.addEventListener('click', () => {
+//   search(searchInput.value);
+// });
+
+// yourLocationIcon.addEventListener('click', () => {
+//   search(yourLocationInput.value,false);
+// });
+
+// yourLocationInput.addEventListener('keyup', (event) => {
+//   if (event.key === 'Enter') {
+//     search(yourLocationInput.value,false);
+//   }
+// });
+
+// yourDestinationIcon.addEventListener('click', () => {
+//   search(yourDestinationInput.value);
+// });
+
+// yourDestinationInput.addEventListener('keyup', (event) => {
+//   if (event.key === 'Enter') {
+//     search(yourDestinationInput.value);
+//   }
+// });
+
+queryInput.addEventListener('input', () => {
+  search(queryInput.value);
+});
+
+queryInput1.addEventListener('input', () => {
+  search(queryInput1.value,1);
+});
+queryInput2.addEventListener('input', () => {
+  search(queryInput2.value,2);
+});
+// queryInput3.addEventListener('input', () => {
+//   search(queryInput3.value,3);
+// });
+queryInput4.addEventListener('input', () => {
+  search(queryInput4.value,4);
+});
+function search(query,boolen) {
+  // const query = searchInput.value;
+  boolen = boolen;
+  if (query) {
+    fetch(`https://nominatim.openstreetmap.org/search?q=${query}&format=json`)
+      .then(response => response.json())
+      .then(data => {
+        searchResults.innerHTML = '';
+        if (data.length > 0) {
+          data.forEach(result => {
+            const resultItem = document.createElement('div');
+            resultItem.classList.add('result-item');
+            resultItem.innerText = result.display_name;
+            resultItem.addEventListener('click', () => {
+              openPlace(result,boolen);
+            });
+            searchResults.appendChild(resultItem);
+          });
+          searchPopup.style.display = 'block';
+        } else {
+          searchResults.innerText = 'No results found.';
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        searchResults.innerText = 'Error fetching search results.';
+      });
+  }
+}
+
+function openPlace(place,boolen) {
+  // get the latitude and longitude of the selected place
+  const lat = parseFloat(place.lat);
+  const lon = parseFloat(place.lon);
+  if(boolen==1)
+  {
+    yourLocationInput.value = `${lat}, ${lon}`;
+  }
+  else if (boolen==2){
+    yourDestinationInput.value = `${lat}, ${lon}`;
+   
+  }
+  else if (boolen==3){
+   
+    queryInput3.value = `${lat}, ${lon}`;
+  }
+  else if (boolen==4){
+   
+   queryInput4.value = `${lat}, ${lon}`;
+ }
+  
+  // zoom to the selected place on the map
+  map.flyTo([lat, lon], 15, {
+    duration: 2,  // duration of the animation in seconds
+    easeLinearity: 0.25  // easing factor for the animation
+  });
+  
+
+ 
+
+  
+ 
+const popupContent = `<strong>${place.display_name}</strong>
+<span>Latitude: ${lat}, Longitude: ${lon}`;
+
+// bind the popup to the marker and open it
+const marker = L.marker([lat, lon]).addTo(map).bindPopup(popupContent).openPopup();
+
+// add a click event listener to the "See More" link
+marker.getPopup().on('click', '.see-more', function(e) {
+    e.preventDefault(); // prevent the link from scrolling to the top of the page
+    const content = `<p>Additional information goes here...</p>`;
+    const popup = marker.getPopup();
+    const isOpen = popup.isOpen();
+    popup.setContent(isOpen ? popupContent : popupContent + content); // toggle the content of the popup
+    if (!isOpen) {
+        popup.update(); // update the size and position of the popup
+    }
+});
+
+// adjust popup size on window resize
+map.on('resize', function() {
+    marker.getPopup().update();
+});
+
+  // close the search popup
+  searchPopup.style.display = 'none';
+}
+
+
+
+const closeSearchPopup = searchPopup.querySelector('.fa-times');
+closeSearchPopup.addEventListener('click', () => {
+  searchPopup.style.display = 'none';
+});
+
+
+
+// publish plan
+const currencySelect = document.querySelector('#currency');
+const budgetAmountInput = document.querySelector('#budget-amount');
+const publishPlanBtn = document.querySelector('.post-plan-btn');
+const publishPlanForm = document.querySelector('#publish-plan-form');
+const Close = document.querySelector('.close');
+const DisplayControl = document.querySelector('#DisplayControl');
+
+publishPlanBtn.addEventListener('click', function() {
+  
+  if (publishPlanForm.style.display === 'none') {
+    publishPlanForm.style.display = 'block';
+    DisplayControl.style.opacity = '30%';
+    // checking negotiation on radio button
+currencySelect.addEventListener('change', function() {
+  console.log(this.value)
+  if (this.value === 'NEG') {
+    budgetAmountInput.style.display = 'none';
+  } else {
+    budgetAmountInput.style.display = 'block';
+  }
+});
+
+  } else {
+    publishPlanForm.style.display = 'none';
+  }
+ 
+});
+
+
+Close.addEventListener('click', function(){
+  publishPlanForm.style.display = 'none';
+  DisplayControl.style.opacity = '100%';
+});
+
+// document.getElementById("myForm").addEventListener("submit", function(event) {
+//     // Prevent the default form submission behavior
+//     event.preventDefault();
+
+//     // Call your JavaScript function here
+//     myFunction();
+
+//     // Submit the form programmatically
+//     this.submit();
+//   });
+
+// // Post plan get location
+// const PickUpPoint = document.querySelector("#pickuppoint");
+// const Plan = document.querySelector(".post");
+// const pick = PickUpPoint.value;
+
+// function myFunction(){
+
+//   swal("Good job!", "The plan has been posted!", "success");
+// }
+// Plan.addEventListener("click", function(){
+// if(!pick){
+//   // If yourLocation is empty, get current location
+//   navigator.geolocation.getCurrentPosition(function(position) {
+//       // Call yourFunction with current location and destination
+        
+//         PickUpPoint.value = position.coords.latitude+','+position.coords.longitude;
+//         console.log(PickUpPoint.value)
+//     });
+// }
+
+// });
+
+
+
+
+        // Toggle menu bar
+        $('#menu-btn').click(function() {
+            $('#menu-bar').toggleClass('show');
+        });
+
+
+        // click mune-btn to show/hide scale and zoom control 
+
+        document.getElementById('menu-btn').addEventListener('click', function() {
+          if (scaleControl._container.style.display === 'none') {
+            scaleControl._container.style.display = 'block';
+          } else {
+            scaleControl._container.style.display = 'none';
+          }
+        });
+        
+        
+        document.getElementById('menu-btn').addEventListener('click', function() {
+          if (zoomControl._container.style.display === 'none') {
+            zoomControl._container.style.display = 'block';
+          } else {
+            zoomControl._container.style.display = 'none';
+          }
+        });
+        
+    });
+
+// Notification popup
+
+// const notificationBtn = document.getElementById('Notification-btn');
+// const notificationMenu = document.getElementById('notification-menu');
+
+// notificationBtn.addEventListener('click', function() {
+//   notificationMenu.classList.toggle('show');
+// });
+
+// document.addEventListener('click', function(event) {
+//   const isClickInside = notificationMenu.contains(event.target) || notificationBtn.contains(event.target);
+//   if (!isClickInside) {
+//     notificationMenu.classList.remove('show');
+//   }
+// });
+$(document).ready(function() {
+  const notificationBtn = $('#Notification-btn');
+  const notificationMenu = $('#notification-menu');
+  const notificationContent = notificationMenu.find('.notification-content');
+  const notificationCounter = document.querySelector('.notification-count');
+  
+  let counter = 0;
+
+
+  const socket = new WebSocket('wss://' + window.location.host + '/wss/touristNotification/{{ request.session.id }}/');
+  socket.onmessage = function(event) {
+      const message = JSON.parse(event.data);
+      swal({
+  title: "Notification",
+  text: message.message,
+  icon: "success",
+  timer: 3000,
+  buttons: false,
+});
+      counter += 1;
+      notificationCounter.innerHTML = counter;
+      console.log(counter)
+  };
+
+
+  notificationBtn.on('click', function() {
+    notificationMenu.toggleClass('show');
+    if (notificationMenu.hasClass('show')) {
+      notificationCounter.innerHTML = '';
+      notificationContent.html('');
+      $.ajax({
+        url: '/get_tourist_notifications/',
+        type: 'GET',
+        success: function(response) {
+          if (response.notifications) {
+            for (const notification of response.notifications) {
+              $('.emptynotification').hide();
+              const notificationItem = $('<div>').addClass('notification-item');
+              const notificationContent = $('<div>').addClass('notification-content');
+              const message = $('<p>').addClass('message').text(notification.message);
+              notificationItem.append(notificationContent.append(message));
+              const notificationTime = $('<p>').addClass('notification-time').text(moment(notification.created_at).fromNow());
+              notificationContent.append(notificationTime);
+              notificationMenu.append(notificationItem);
+            }
+            counter = 0;
+            notificationCounter.innerHTML = '';
+          } else {
+            const noNotification = $('<p>').text('No notifications found.');
+            const emptyNotification = $('.emptynotification');
+            emptyNotification.html(noNotification);
+            notificationCounter.innerHTML = '';
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.statusText);
+        }
+      });
+    }
+  });
+
+  $(document).on('click', function(event) {
+    const isClickInside = notificationMenu.is(event.target) || notificationBtn.is(event.target);
+    if (!isClickInside) {
+      notificationMenu.removeClass('show');
+      counter = 0;
+      notificationCounter.innerHTML = '';
+    }
+  });
+});
+
+
+
+
+
+
+    
+// alert display
+    {% if msg %}
+    swal({
+   title: "Welcome !!!",
+  text: '{{msg}}',
+  icon: "success",
+  timer: 2000,
+  buttons: false
+    });
+{% endif %}
+
+
+
+
+
+
+  </script>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Confirm OTP</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		body {
+			background-color: #1a1a1a;
+			color: #ffffff;
+			font-family: Arial, sans-serif;
+			font-size: 16px;
+			line-height: 1.5;
+			margin: 0;
+			padding: 0;
+		}
+		
+		h1 {
+			font-size: 36px;
+			margin-bottom: 20px;
+			text-align: center;
+		}
+		
+		form {
+			background-color: #333333;
+			border-radius: 10px;
+			box-sizing: border-box;
+			margin: 0 auto;
+			max-width: 500px;
+			padding: 30px;
+			text-align: center;
+			width: 90%;
+		}
+		
+		label {
+			display: block;
+			font-size: 20px;
+			margin-bottom: 10px;
+			text-align: left;
+		}
+		
+		input[type="text"], input[type="email"], input[type="password"] {
+			background-color: #ffffff;
+			border: none;
+			border-radius: 5px;
+			box-sizing: border-box;
+			font-size: 20px;
+			margin-bottom: 20px;
+			padding: 10px;
+			width: 100%;
+		}
+
+		.location-icon{
+            position: relative;
+            top: 10px;
+            left: 92%;
+            cursor: pointer;
+            color: #ffffff;
+        }
+		
+		button {
+			background-color: #ffffff;
+			border: none;
+			border-radius: 5px;
+			box-shadow: none;
+			color: #333333;
+			cursor: pointer;
+			display: inline-block;
+			font-size: 16px;
+			font-weight: bold;
+			margin-top: 20px;
+			padding: 10px 20px;
+			text-align: center;
+			text-decoration: none;
+			transition: background-color 0.3s ease;
+		}
+		
+		button:hover {
+			background-color: #f2f2f2;
+		}
+		
+		input[type="submit"] {
+			background-color: #ff8c00;
+			border: none;
+			border-radius: 5px;
+			box-shadow: none;
+			color: #ffffff;
+			cursor: pointer;
+			display: inline-block;
+			font-size: 20px;
+			font-weight: bold;
+			margin-top: 20px;
+			padding: 10px 20px;
+			text-align: center;
+			text-decoration: none;
+			transition: background-color 0.3s ease;
+		}
+		
+		input[type="submit"]:hover {
+			background-color: #f26700;
+		}
+		
+		@media only screen and (max-width: 600px) {
+			form {
+				padding: 20px;
+			}
+			
+			h1 {
+				font-size: 24px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<h1>Confirm OTP</h1>
+	<form action="process_otp.php" method="POST">
+		<label for="email">Email:</label>
+		<input type="email" name="email" id="email" value="johndoe@example.com" readonly>
+		<label for="otp_code">Enter OTP:</label>
+		<input type="text" name="otp_code" id
+		<input type="text" name="otp_code" id="otp_code" pattern="\d{6}" required>
+		<button type="button" onclick="resendOTP()">Resend OTP</button>
+		<input type="submit" value="Confirm OTP">
+	</form>
+	
+	<script>
+		function resendOTP() {
+			// Code to resend OTP goes here
+			alert("OTP resent successfully!");
+		}
+	</script>
+</body>
+</html>

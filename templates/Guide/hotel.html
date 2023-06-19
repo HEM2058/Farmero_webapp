@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Hotel</title>
+  <style>
+    /* CSS for form styling */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    
+    .form-container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f2f2f2;
+      border-radius: 5px;
+    }
+    
+    .form-container h2 {
+      text-align: center;
+    }
+    
+    .form-container label,
+    .form-container input,
+    .form-container textarea {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      padding: 8px;
+      border-radius: 5px;
+    }
+    
+    .form-container input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+    
+    .form-container input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+    
+    .form-container .error-message {
+      color: red;
+      font-size: 14px;
+    }
+    
+    /* Media queries for responsiveness */
+    @media only screen and (max-width: 600px) {
+      .form-container {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="form-container">
+    <h2>Add Hotel details</h2>
+    <form action"{% url 'savehotel' %}" id="tourist-form" method="post">
+      <label for="hotel-name">Hotel Name:</label>
+      <input type="text" id="hotel-name" name="hotel-name" required>
+      
+      <label for="video-intro">Hotel Video Intro (Recommended 2 minutes):</label>
+      <input type="file" id="video-intro" name="video-intro" accept="video/*" required>
+      
+      <label for="room-images">Hotel Rooms (Recommended 3 Images):</label>
+      <input type="file" id="room-images" name="room-images[]" accept=".png, .jpg, .jpeg" multiple required>
+      
+      <label for="tour-package-images">Hotel Tour Packages (Recommended 3 Images):</label>
+      <input type="file" id="tour-package-images" name="tour-package-images[]" accept=".png, .jpg, .jpeg" multiple required>
+      
+      <label for="food-drink-images">Hotel Food and Drinks (Recommended 3 Images):</label>
+      <input type="file" id="food-drink-images" name="food-drink-images[]" accept=".png, .jpg, .jpeg" multiple required>
+      
+      <label for="room-size">Hotel Room Size(in square meters):</label>
+      <input type="text" id="room-size" name="room-size" required>
+      
+      <label for="room-prices">Hotel Room Prices per Night (in USD ):</label>
+      <input type="number" id="room-prices" name="room-prices" step="0.01" required>
+      
+      <label for="room-details">Hotel Room Details(focus on hotel services):</label>
+      <textarea id="room-details" name="room-details" rows="4" required></textarea>
+      
+      <input type="submit" value="Submit">
+    </form>
+    <p id="form-validation-error" class="error-message"></p>
+  </div>
+  
+  <script>
+    // JavaScript form validation
+    const form = document.getElementById('tourist-form');
+    const errorMessage = document.getElementById('form-validation-error');
+    
+    form.addEventListener('submit', function(event) {
+      const hotelName = document.getElementById('hotel-name').value;
+      const videoIntro = document.getElementById('video-intro').value;
+    });
+     
+ </script>
+</body>
+</html>

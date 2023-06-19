@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sign Up</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body {
+			background-color: #f5f5f5;
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+		
+		.signup-box {
+			background-color: #ffffff;
+			border-radius: 5px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+			margin: 50px auto;
+			padding: 20px;
+			max-width: 400px;
+		}
+		
+		.signup-box h2 {
+			margin: 0 0 20px;
+			text-align: center;
+		}
+		
+		.signup-box input[type="text"],
+		.signup-box input[type="email"],
+		.signup-box input[type="password"] {
+			border-radius: 3px;
+			border: 1px solid #cccccc;
+			box-sizing: border-box;
+			display: block;
+			font-size: 16px;
+			margin-bottom: 10px;
+			padding: 10px;
+			width: 100%;
+		}
+
+		.signup-box input[type="number"] {
+			border-radius: 3px;
+			border: 1px solid #cccccc;
+			box-sizing: border-box;
+			display: block;
+			font-size: 16px;
+			margin-bottom: 10px;
+			padding: 10px;
+			width: 100%;
+		}
+
+		.signup-box input[type="checkbox"] {
+			margin-right: 5px;
+		}
+		
+		.signup-box input[type="submit"] {
+			background-color: #4CAF50;
+			border: none;
+			border-radius: 3px;
+			box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+			color: #ffffff;
+			cursor: pointer;
+			display: block;
+			font-size: 16px;
+			margin: 20px auto 0;
+			padding: 10px;
+			width: 100px;
+		}
+		
+		.signup-box input[type="submit"]:hover {
+			background-color: #3e8e41;
+		}
+		
+		.signup-box p {
+			margin: 0;
+			text-align: center;
+		}
+		
+		.signup-box a {
+			color: #4CAF50;
+			text-decoration: none;
+		}
+		
+		.signup-box a:hover {
+			text-decoration: underline;
+		}
+		
+		@media only screen and (max-width: 600px) {
+			.signup-box {
+				margin: 20px;
+				padding: 10px;
+				max-width: none;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="signup-box">
+		<h2>Sign Up as AgroBuyer</h2>
+		<form action={% url 'gregistration' %} method="post">
+			{% csrf_token %}
+			<input type="text" name="uname" placeholder="Full Name" required>
+			<input type="email" name="email" placeholder="Email" required>
+			<input type="text" name="country" placeholder="Country">
+			<input type="text" name="sex" placeholder="Sex">
+			<input type="text" name="contact" placeholder="Phone Number">
+			<div>
+				<label for="longitude">Longitude:</label>
+				<input type="text" name="lat" id="longitude"required>
+				<label for="latitude">Latitude:</label>
+				<input type="text" name="lng" id="latitude"required>
+				<button type="button" onclick="getLocation()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                    <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+                    <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                  </svg>  Fill current location</button>
+			</div>
+			<div style="margin-top:8px ;">
+				<input type="password" name="password" placeholder="Password" required>
+				<input type="password" name="cpassword" placeholder="Confirm Password" required>
+			</div>
+		
+			
+			<label><input type="checkbox" name="agree" required> I agree to the terms and conditions</label>
+			
+			<input type="submit" value="Sign Up">
+		</form>
+		
+		<p>Already have an account? <a href="{% url 'gsignin' %}">Log in</</p>
+	</div>
+	
+	<script>
+		function getLocation() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(showPosition);
+			} else {
+				alert("Geolocation is not supported by this browser.");
+			}
+		}
+		
+		function showPosition(position) {
+			document.getElementById("longitude").value = position.coords.longitude;
+			document.getElementById("latitude").value = position.coords.latitude;
+		}
+	</script>
+</body>
+</html>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+
+
+
+
+
+	{% if msg %}
+	swal({
+		icon: 'error',
+		title: 'Oops...',
+		text: '{{ msg }}',
+	});
+   {% endif %}
+</script>

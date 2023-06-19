@@ -1,0 +1,444 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Farmero - User Mode Selection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+   
+   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+   
+   <style>
+      /* Global Styles */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #ffffff;
+        color: #000000;
+        text-align: center;
+        padding: 20px;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .header1-container {
+        display: flex;
+        align-items: center;
+      }
+     
+      h1 {
+        font-size: 32px;
+        margin-right: 10px;
+      }
+      .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-top: 50px;
+      }
+      .card {
+        width: 40%;
+        margin-bottom: 20px;
+        background-color: #02066F;
+        color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        text-align: left;
+        position: relative;
+      }
+      .card-icon-container {
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 60px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+      }
+      .card-icon-container i {
+        font-size: 30px;
+        color: #02066F;
+      }
+      /* hover */
+      .header1-container:hover .fa-map-marker-alt {
+  transform: rotate(360deg);
+  transition: transform 0.5s ease-in-out;
+}
+
+  /* Global Styles */
+  /* ... */
+  .header1-container:hover .fa-map-marker-alt {
+    transform: rotate(360deg);
+    transition: transform 0.5s ease-in-out;
+  }
+
+
+      h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+      h3 {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+      p {
+        margin-bottom: 20px;
+      }
+      button {
+        background-color: #02066F;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        border: 2px solid white;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+       
+      }
+      button:hover {
+        background-color: #2a2f81;
+      }
+     
+  .normal-btn:hover {
+    background-color: #e0e0e0;
+    color: #1e2a78;
+  }
+
+.tourist-btn:hover {
+    background-color: #e0e0e0;
+    color: #1e2a78;
+}
+.guider-btn:hover {
+    background-color: #e0e0e0;
+    color: #1e2a78;
+}
+
+/* Media Queries */
+@media only screen and (max-width: 768px) {
+.card {
+width: 100%;
+}
+}
+
+.card:hover .card-icon-container i {
+  animation: vibration 0.5s linear infinite;
+}
+
+@keyframes vibration {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-2px, -2px); }
+  20% { transform: translate(2px, -2px); }
+  30% { transform: translate(-2px, 2px); }
+  40% { transform: translate(2px, 2px); }
+  50% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, -2px); }
+  70% { transform: translate(-2px, 2px); }
+  80% { transform: translate(2px, 2px); }
+  90% { transform: translate(-2px, -2px); }
+  100% { transform: translate(0, 0); }
+}
+h1 {
+  font-size: 0;
+  margin-right: 10px;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  animation: show-title 2s ease-out backwards;
+}
+
+h1::before {
+  /* content: "\f3c5" "  Tourismo"; */
+  font-family: "Font Awesome 5 Free";
+  min-height: 100vh;
+  font-size: 72px;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  line-height: 1.2;
+  animation: fade-in 2s ease-in-out forwards;
+  letter-spacing: 10px;
+}
+
+@keyframes show-title {
+  0% {
+    opacity: 0;
+    font-size: 0;
+  }
+  100% {
+    opacity: 1;
+    font-size: 100%;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Add this to delay the show-title animation by 2 seconds */
+h1::after {
+  /* content: ""; */
+  font-size: 24px;
+  opacity: 0;
+  animation: fade-out 2s ease-in-out 2s forwards;
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Add this animation to hide the white background after 2 seconds */
+@keyframes hide-background {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+h1 {
+  animation-delay: 2s;
+  animation-fill-mode: forwards;
+  animation-name: hide-background;
+}
+
+@media (max-width: 768px) {
+  h1::before {
+    font-size: 48px;
+  }
+  
+  h1::after {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1::before {
+    font-size: 36px;
+  }
+  
+  h1::after {
+    font-size: 14px;
+   
+  }
+}
+
+@media (max-width: 320px) {
+  h1::before {
+    font-size: 24px;
+  }
+  
+  h1::after {
+    font-size: 12px;
+  }
+}
+
+.header1-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  padding: 20px;
+  color: #2c053f;
+  border-radius: 50px;
+}
+
+.header1-container h2 {
+  font-size: 20px; /* reduced font size */
+  margin: 0;
+  margin-left: 10px;
+  letter-spacing: 4px;
+}
+@media screen and (max-width: 767px) {
+  h1 {
+    min-height: 100vh;
+  }
+}
+
+</style>
+
+</head>
+<body>
+  <header>
+    <div class="header-container">
+    
+
+   
+      <h1 style="background-image: url('{% static '/Tourismo-01.png' %}'); background-size: 355px 500px;background-repeat: no-repeat; background-position: center;">Tourismo</h1>
+
+
+    </div>
+    <div class="header1-container">
+
+      <i class="fas fa-map-marker-alt"></i>
+     
+        <h2> Farmero </h2>
+   </div>
+  </header>
+  <main>
+    <h2>User Mode</h2>
+    <div class="card-container">
+      <!-- <div class="card" style="background-color: #008000;">
+        <div class="card-icon-container">
+          <i class="fas fa-user"></i>
+        </div>
+        <h3>Normal</h3>
+        <p>Choose this mode if you are a regular user who wants to explore different places.</p>
+        <form id="form1" action="{% url 'index1' %}" method="get">
+          <button class="normal-btn" type="submit">Select</button>
+        </form>
+      </div> -->
+      <div class="card" style="background-color: #008000;">
+        <div class="card-icon-container">
+          <i class="fas fa-tractor"></i> 
+        </div>
+        <h3>FarmMart</h3>
+        <p>Choose this mode if you are a farmer or someone selling agricultural products.</p>
+        <form id="form2"  action="{% url 'tsignup' %}" method="get">
+          <button class="tourist-btn" type="submit">Select</button>
+        </form>
+      </div>
+      <div class="card" style="background-color: #008000;">
+        <div class="card-icon-container">
+          <i class="fas fa-shopping-basket"></i>
+        
+        </div>
+        <h3>AgroBuyer</h3>
+        <p>Choose this mode if you want explore and buy the fresh agricultural product.</p>
+        <!-- <button class="guider-btn">Select</button> -->
+        <form id="form3"  action="{% url 'gsignup' %}" method="get">
+          <button class="guider-btn" type="submit">Select</button>
+        </form>
+      </div>
+    </div>
+  </main>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script>
+      setTimeout(function() {
+  var headerContainer = document.querySelector('.header-container');
+  headerContainer.parentNode.removeChild(headerContainer);
+}, 4000);
+    window.onload = function() {
+  getLocation();
+}
+
+function getLocation() {
+  
+    navigator.geolocation.getCurrentPosition(showPosition);
+
+}
+
+function showPosition(position) {
+  var lat12 = position.coords.latitude;
+  var lng12= position.coords.longitude;
+  // Use the user's location to set the center and zoom level of the map
+}
+
+
+
+   $('.normal-btn').on('click', function(event) {
+  event.preventDefault(); // Prevent the default form submission behavior
+  swal({
+    title: "Are you sure you want to select Normal Mode?",
+    buttons: ["Cancel", "OK"],
+  }).then((value) => {
+    if (value) {
+      // OK button clicked
+      // Process further here
+      console.log("Normal Mode Selected");
+      $('#form1').submit(); // Submit the form programmatically after processing
+    } else {
+      // Cancel button clicked (or clicked outside the dialog)
+      // Interrupt the process here
+      console.log("Process Interrupted");
+    }
+  });
+});
+
+$('.tourist-btn').on('click', function(event) {
+  event.preventDefault(); // Prevent the default link behavior
+  swal({
+    title: "Are you sure you want to select FarmMart Mode?",
+    buttons: ["Cancel", "OK"],
+  }).then((value) => {
+    if (value) {
+      // OK button clicked
+      // Process further here
+      console.log("Tourist Mode Selected");
+      $('#form2').submit(); // Submit the form programmatically after processing
+    } else {
+      // Cancel button clicked (or clicked outside the dialog)
+      // Interrupt the process here
+      console.log("Process Interrupted");
+     
+    }
+  });
+});
+
+$('.guider-btn').on('click', function(event) {
+  event.preventDefault(); // Prevent the default link behavior
+  swal({
+    title: "Are you sure you want to select AgroBuyer Mode?",
+    buttons: ["Cancel", "OK"],
+  }).then((value) => {
+    if (value) {
+      // OK button clicked
+      // Process further here
+      console.log("Guider Mode Selected");
+      $('#form3').submit(); // Submit the form programmatically after processing
+    } else {
+      // Cancel button clicked (or clicked outside the dialog)
+      // Interrupt the process here
+      console.log("Process Interrupted");
+    }
+  });
+});
+
+
+
+
+  </script>
+</body>
+</html>
+
+
+

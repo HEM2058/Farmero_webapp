@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Help</title>
+  </head>
+  <style>
+    /* Help Navigation Menu */
+    .help-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .help-nav .nav-item {
+      cursor: pointer;
+      padding: 10px 15px;
+      background-color: #f7f7f7;
+      border: none;
+      color: #444;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .help-nav .nav-item:hover,
+    .help-nav .nav-item.active {
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .help-nav .nav-item.active {
+      border-bottom: 2px solid #007bff;
+      color: #007bff;
+    }
+
+    /* Help Tabs */
+    .help-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .help-content .help-tab {
+      display: none;
+      max-width: 800px;
+      margin-bottom: 40px;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .help-content .active {
+      display: block;
+    }
+
+    .help-content h2 {
+      font-size: 24px;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    .help-content p {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    /* FAQ List */
+    .faq-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .faq-list li {
+      margin-bottom: 20px;
+    }
+
+    .faq-list h3 {
+      font-size: 20px;
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #007bff;
+    }
+
+    .faq-list p {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 0;
+      color: #444;
+    }
+
+    /* Report a Problem Form */
+    .report-form {
+      max-width: 500px;
+      margin-bottom: 40px;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .report-form label {
+      display: block;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #007bff;
+    }
+
+    .report-form input,
+    .report-form textarea {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+
+    .report-form textarea {
+      height: 120px;
+    }
+
+    .report-form button[type="submit"] {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .report-form button[type="submit"]:hover {
+      background-color: #0062cc;
+    }
+
+    .feedback-form {
+      max-width: 500px;
+      margin-bottom: 40px;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .feedback-form label {
+      display: block;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #007bff;
+    }
+
+    .feedback-form input,
+    .feedback-form textarea {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+
+    .feedback-form textarea {
+      height: 120px;
+    }
+
+    .feedback-form button[type="submit"] {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .feedback-form button[type="submit"]:hover {
+      background-color: #0062cc;
+    }
+
+    /* Footer */
+    .help-footer {
+      text-align: center;
+      font-size: 14px;
+      color: #999;
+    }
+
+    .help-footer a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .help-footer a:hover {
+      text-decoration: underline;
+    }
+    .faq-list {
+      height: 500px;
+      overflow-y: auto;
+      overflow-y: scroll;
+    }
+  </style>
+  <body style="height: 100vh; overflow: hidden">
+    <a style="text-decoration: none" href="#" class="menu-item active"
+      ><i class="fas fa-map-marker-alt"></i> Tourismo</a
+    >
+    <div class="help-section">
+      <ul class="help-nav">
+        <li
+          style="list-style-type: none"
+          class="nav-item active"
+          data-target="faq"
+        >
+          FAQ
+        </li>
+        <li
+          style="list-style-type: none"
+          class="nav-item"
+          data-target="report-problem"
+        >
+          Report a Problem
+        </li>
+
+        <li
+          style="list-style-type: none"
+          class="nav-item"
+          data-target="feedback"
+        >
+          Feedback
+        </li>
+      </ul>
+      <div class="help-content">
+        <div id="faq" class="help-tab active">
+          <h2>Frequently Asked Questions</h2>
+          <!-- <ul class="faq-list">
+            <li>
+              <h3>What is the Normal mode?</h3>
+              <p>
+                The Normal mode is a mode of the Tourismo app that allows you to
+                use the app without signing up. You can search for places,
+                navigate to them, and find your location using this mode.
+              </p>
+            </li>
+            <li>
+              <h3>What is the Tourist mode?</h3>
+              <p>
+                The Tourist mode is a mode of the Tourismo app that requires you
+                to sign up. By logging into this mode, you can request any
+                active guide to help you reach your destination by riding. You
+                can also post your plan and guides will apply to your plans so
+                that you can select one from these guides based on their rating
+                and other information.
+              </p>
+            </li>
+            <li>
+              <h3>What is the Guide mode?</h3>
+              <p>
+                The Guide mode is a mode of the Tourismo app that requires you
+                to sign up. By logging into this mode, you can apply to the
+                tourist's plan. You have a higher chance of being contacted if
+                you are using the app and allowed the location services. You can
+                earn money from the app by helping people by riding, providing
+                support. As we are in the initial state, we cannot let any
+                service fee, and on advancing features of the Tourismo app, we
+                will provide some minimum service fee to compensate for our
+                operating and maintenance costs.
+              </p>
+            </li>
+            <li>
+              <h3>What features are available in all modes?</h3>
+              <p>All modes of the Tourismo app have the following features:</p>
+              <ul>
+                <li>Searching places</li>
+                <li>Navigating to places</li>
+                <li>Find your location services</li>
+              </ul>
+            </li>
+            <li>
+              <h3>How do I sign up for the Tourist mode or Guide mode?</h3>
+              <p>
+                To sign up for the Tourist mode or Guide mode, click on the
+                "Sign Up" button and follow the instructions. You will need to
+                provide your name, email address, and password to create an
+                account.
+              </p>
+            </li>
+            <li>
+              <h3>How do I request a guide in the Tourist mode?</h3>
+              <p>
+                To request a guide in the Tourist mode, You can simply click on
+                the markers seen on the map and see the popup information of
+                guides and click on request a ride button.On clicking the
+                request a ride button your phone number will be sent to
+                corresponding guide and they will contact you through contact
+                number.
+              </p>
+            </li>
+            <li>
+              <h3>How do I apply to a tourist's plan in the Guide mode?</h3>
+              <p>
+                To apply to a tourist's plan in the Guide mode, click on markers
+                icon visible on map and find the plan you are interested in.
+                Click on the markers to see more information and then click on
+                the "Apply" button to apply to the plan.
+              </p>
+            </li>
+            <li>
+              <h3>Can I earn money as a guide?</h3>
+              <p>
+                Yes, as a guide in the Guide mode of the Tourismo app, you can
+                earn money by helping people by riding and providing support.
+                You will need to set up a payment method in the app to receive
+                payment.
+              </p>
+            </li>
+            <li>
+              <h3>How do I reset my password?</h3>
+              <p>
+                To reset your password, click on the "Forgot Password" link and
+                follow the instructions.
+              </p>
+            </li>
+          </ul> -->
+        </div>
+        <div id="report-problem" class="help-tab report-form">
+          <h2>Report a Problem</h2>
+          <form>
+            <label for="problem-type"
+              >What type of problem are you experiencing?</label
+            >
+            <select id="problem-type" name="problem-type">
+              <option value="technical-issue">Technical Issue</option>
+              <option value="account-issue">Account Issue</option>
+              <option value="billing-issue">Billing Issue</option>
+              <option value="other">Other</option>
+            </select>
+            <label for="problem-description"
+              >Please describe the problem:</label
+            >
+            <textarea
+              id="problem-description"
+              name="problem-description"
+              rows="5"
+            ></textarea>
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+
+        <div id="feedback" class="help-tab feedback-form">
+          <h2>Feedback</h2>
+          <form>
+            <label for="feedback-type"
+              >What type of feedback do you have?</label
+            >
+            <select id="feedback-type" name="feedback-type">
+              <option value="general">General Feedback</option>
+              <option value="feature-request">Feature Request</option>
+              <option value="bug-report">Bug Report</option>
+              <option value="complaint">Complaint</option>
+            </select>
+            <label for="feedback-description"
+              >Please provide your feedback:</label
+            >
+            <textarea
+              id="feedback-description"
+              name="feedback-description"
+              rows="5"
+            ></textarea>
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+  <script>
+    const navItems = document.querySelectorAll(".nav-item");
+    const tabs = document.querySelectorAll(".help-tab");
+
+    navItems.forEach((item) => {
+      item.addEventListener("click", (e) => {
+        const target = e.target.dataset.target;
+        showTab(target);
+        setActiveNavItem(item);
+      });
+    });
+
+    function showTab(target) {
+      tabs.forEach((tab) => {
+        if (tab.id === target) {
+          tab.classList.add("active");
+        } else {
+          tab.classList.remove("active");
+        }
+      });
+    }
+
+    function setActiveNavItem(item) {
+      navItems.forEach((navItem) => {
+        if (navItem === item) {
+          navItem.classList.add("active");
+        } else {
+          navItem.classList.remove("active");
+        }
+      });
+    }
+  </script>
+</html>
